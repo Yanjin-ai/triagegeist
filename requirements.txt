@@ -1,0 +1,24 @@
+# Core
+kagglehub
+pandas
+numpy
+polars
+pyarrow
+scikit-learn
+pyyaml
+
+# Models
+lightgbm
+xgboost
+torch
+transformers
+rtdl  # FT-Transformer / TabTransformer
+
+# Analysis
+matplotlib
+# fairlearn  # optional, for subgroup metrics
+
+# Product / serving (Phase 8 — pick one at that phase)
+# streamlit
+# fastapi
+# uvicorn

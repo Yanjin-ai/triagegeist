@@ -1,0 +1,36 @@
+# Data — never commit (license + size)
+data/raw/
+data/interim/
+data/processed/
+*.parquet
+*.csv.gz
+
+# Raw competition data (redistribution prohibited) + generated demo feed/predictions
+triagegeist/
+app/data.js
+app/data.json
+submission*.csv
+
+# Models / artifacts
+*.pt
+*.pkl
+*.joblib
+models_out/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Secrets
+.kaggle/
+kaggle.json
+.env
+
+# OS
+.DS_Store
+
+# macOS AppleDouble artifacts (exFAT/FAT volumes)
+._*

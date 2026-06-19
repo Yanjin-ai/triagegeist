@@ -1,0 +1,20 @@
+[GBDT-hgb] QWK=0.9287 acc=0.8501 macroF1=0.8681 undertriage(1,2)=0.0244 overtriage(4,5)=0.1228 | recall/class 1:0.950 2:0.966 3:0.875 4:0.735 5:0.853
+
+Confusion (val):
+       pred1  pred2  pred3  pred4  pred5
+true1    459     24      0      0      0
+true2     31   1948     37      0      0
+true3      0     14   3797    500     27
+true4      0      0    383   2538    532
+true5      0      0      8    243   1459
+
+Undertriage by language (val):
+language    n      qwk  accuracy  undertriage_critical
+Estonian  740 0.929188  0.848649              0.040000
+ Swedish  952 0.929546  0.855042              0.032086
+  Somali  489 0.912698  0.830266              0.030612
+ English 1203 0.925268  0.833749              0.030303
+ Finnish 6578 0.930540  0.854059              0.023792
+ Russian  887 0.929668  0.851184              0.016667
+   Other  570 0.932139  0.852632              0.008696
+  Arabic  581 0.921420  0.845095              0.008475

@@ -1,0 +1,72 @@
+# Central config — confirmed from real data (2026-06-19). See docs/DATA_DICTIONARY.md.
+
+paths:
+  raw: triagegeist          # kagglehub download landed here
+  interim: data/interim
+  processed: data/processed
+  reports: reports
+
+data:
+  files:
+    train: train.csv
+    test: test.csv
+    chief_complaints: chief_complaints.csv
+    patient_history: patient_history.csv
+    sample_submission: sample_submission.csv
+  id_col: patient_id        # per-visit unique; train ∩ test = ∅
+
+targets:
+  triage_acuity: {type: ordinal, range: [1, 5], scored: true}        # SUBMISSION target
+  disposition:   {type: categorical, scored: false, train_only: true} # aux head + ops
+  ed_los_hours:  {type: regression, scored: false, train_only: true}  # aux head + ops
+
+# Scored metric NOT yet confirmed — see docs/DECISIONS.md open item.
+# Optimize for QWK; also report accuracy + macro-F1.
+metric:
+  primary: quadratic_weighted_kappa   # TODO confirm on competition Evaluation tab
+  also_report: [accuracy, macro_f1, per_class_recall]
+
+split:
+  strategy: stratified      # leakage-safe (no repeated patients); stratify on triage_acuity
+  test_frac: 0.0            # test.csv is the real holdout; this is train internal val
+  val_frac: 0.15
+  seed: 42
+
+leakage_blocklist: [disposition, ed_los_hours]   # never use as features
+
+features:
+  numeric_vitals: [systolic_bp, diastolic_bp, mean_arterial_pressure, pulse_pressure,
+                   heart_rate, respiratory_rate, temperature_c, spo2, gcs_total,
+                   pain_score, shock_index, news2_score]
+  anthropometric: [weight_kg, height_cm, bmi]
+  counts: [num_prior_ed_visits_12m, num_prior_admissions_12m,
+           num_active_medications, num_comorbidities]
+  numeric_context: [age, arrival_hour, arrival_month]
+  categorical: [site_id, triage_nurse_id, arrival_mode, transport_origin, shift,
+                arrival_day, arrival_season, pain_location, mental_status_triage,
+                chief_complaint_system, sex, age_group, language, insurance_type]
+  text: chief_complaint_raw          # from chief_complaints.csv
+  history_prefix: hx_                # 25 binary flags from patient_history.csv
+
+sentinels:
+  pain_score: -1                     # recode to NaN + add pain_missing indicator
+
+models:
+  gbdt:
+    objective: multiclass            # or ordinal via regression-to-rank; test both
+    num_boost_round: 3000
+    early_stopping: 150
+    class_weight: balanced           # acuity 1 is rare & safety-critical
+  fusion:
+    text_encoder: emilyalsentzer/Bio_ClinicalBERT
+    tab_encoder: ft_transformer
+    max_text_len: 48
+    batch_size: 64
+    lr: 2.0e-5
+    epochs: 5
+
+calibration:
+  method: isotonic
+fairness:
+  subgroups: [language, insurance_type, sex, age_group, pain_missing, site_id]
+  critical_classes: [1, 2]           # undertriage on these is the dangerous error

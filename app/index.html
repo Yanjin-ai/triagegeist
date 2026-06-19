@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Triage Copilot — ED Operations Console</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#161c24; --panel2:#1c242e; --line:#2a3441;
+    --text:#e6edf3; --muted:#8b98a8; --accent:#4aa3ff;
+    --a1:#ff4d4f; --a2:#ff8c3b; --a3:#f5c518; --a4:#3ecf8e; --a5:#7d8794;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--text)}
+  header{padding:14px 20px;border-bottom:1px solid var(--line);background:var(--panel);
+         display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  header h1{font-size:16px;margin:0;font-weight:650}
+  .badge{font-size:11px;padding:3px 8px;border-radius:20px;background:#13351f;color:#3ecf8e;
+         border:1px solid #1f5235}
+  .honesty{font-size:11.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+           border-radius:6px;padding:6px 10px;flex:1;min-width:260px}
+  nav{display:flex;gap:4px;padding:0 20px;background:var(--panel);border-bottom:1px solid var(--line)}
+  nav button{background:none;border:none;color:var(--muted);padding:11px 16px;cursor:pointer;
+             font-size:13.5px;border-bottom:2px solid transparent}
+  nav button.active{color:var(--text);border-bottom-color:var(--accent)}
+  main{padding:18px 20px;max-width:1280px}
+  .row{display:flex;gap:16px;flex-wrap:wrap}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .controls{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{background:var(--panel);border:none;color:var(--muted);padding:7px 14px;cursor:pointer;font-size:13px}
+  .seg button.active{background:var(--accent);color:#04121f;font-weight:600}
+  label.chk{color:var(--muted);font-size:12.5px;display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:var(--panel2)}
+  .pill{display:inline-block;min-width:20px;text-align:center;font-weight:700;color:#04121f;
+        border-radius:5px;padding:1px 7px;font-size:12px}
+  .a1{background:var(--a1)}.a2{background:var(--a2)}.a3{background:var(--a3)}
+  .a4{background:var(--a4)}.a5{background:var(--a5);color:#fff}
+  .flag{color:var(--a1);font-weight:700}
+  .bar{height:9px;border-radius:5px;background:var(--panel2);overflow:hidden}
+  .bar > i{display:block;height:100%;background:var(--accent)}
+  .muted{color:var(--muted)}.right{text-align:right}
+  .kpi{flex:1;min-width:150px}
+  .kpi .v{font-size:26px;font-weight:700}.kpi .l{color:var(--muted);font-size:12px}
+  .col{flex:1;min-width:240px}
+  h3{font-size:13px;margin:0 0 10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .kv{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--line);font-size:13px}
+  .assist{background:linear-gradient(180deg,#15212e,#161c24);border:1px solid #25415c}
+  .assist .tag{font-size:10px;color:#4aa3ff;border:1px solid #25415c;border-radius:4px;padding:1px 6px;margin-left:6px}
+  .note{font-size:12.5px;color:var(--muted);margin:6px 0}
+  .redflag{color:#ff8c3b;font-weight:600}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🚑 Triage Copilot</h1>
+  <span class="badge" id="modelBadge">model_structured_v1 · text-blind</span>
+  <span class="honesty"><b>Honest core:</b> decisions use the text-blind structured model. Complaint text
+  near-deterministically encodes the label in this synthetic data, so text/fusion (LB ≈ 1.0) is shown only as a
+  dataset insight — never in the decision view.</span>
+</header>
+<nav>
+  <button data-view="queue" class="active">Queue</button>
+  <button data-view="patient">Patient</button>
+  <button data-view="ops">Ops console</button>
+</nav>
+<main id="app"></main>
+
+<script src="data.js"></script>
+<script>
+const D = window.TRIAGE_DATA;
+const M = D.meta;
+let policy = "safety_first";
+let selected = D.patients[0];
+const filters = {risk:false, unc:false, wait:false};
+
+const aclass = a => "a"+a;
+const fmtpct = x => (x==null?"—":(100*x).toFixed(0)+"%");
+const acuityColors = {1:"--a1",2:"--a2",3:"--a3",4:"--a4",5:"--a5"};
+const RED_FLAGS = ["haemorrhage","hemorrhage","sepsis","septic","arrest","unresponsive","stroke",
+  "meningitis","thunderclap","anaphylaxis","stab","gunshot","necrotis","emergency","failure",
+  "hypoxia","haemoptysis","tension","embolism","mi ","stemi","shock"];
+
+function priority(p, pol){
+  const w = D.policies[pol];
+  const urgency = (5-p.acuity)/4;
+  const unc = (p.entropy||0)/M.ln5;
+  const wait = Math.min((p.wait_hours||0)/6,1);
+  return w.w_urgency*urgency + w.w_crit*p.p_critical + w.w_unc*unc + w.w_wait*wait;
+}
+function senior(p){ return (p.entropy>=M.ent_hi) && (p.p_critical>=0.2 || p.acuity<=2); }
+
+// ---------- Queue ----------
+function renderQueue(){
+  let list = D.patients.slice();
+  if(filters.risk) list = list.filter(p=>p.acuity<=2 || p.p_critical>=0.3);
+  if(filters.unc)  list = list.filter(p=>p.entropy>=M.ent_hi);
+  if(filters.wait) list = list.filter(p=>p.wait_hours>=3);
+  list.forEach(p=>p._pr=priority(p,policy));
+  list.sort((a,b)=>b._pr-a._pr);
+  const rows = list.map(p=>`
+    <tr onclick="go('patient','${p.patient_id}')">
+      <td><span class="pill ${aclass(p.acuity)}">${p.acuity}</span></td>
+      <td>${p.patient_id}</td>
+      <td>${p.age}/${p.sex}</td>
+      <td>${p.arrival_mode}</td>
+      <td>${p.chief_complaint_system}</td>
+      <td class="right">${fmtpct(p.p_critical)}</td>
+      <td class="right">${fmtpct(p.p_admit)}</td>
+      <td class="right">${(p.entropy).toFixed(2)}</td>
+      <td class="right">${p.wait_hours.toFixed(1)}h</td>
+      <td>${p.bucket}</td>
+      <td class="right"><b>${p._pr.toFixed(3)}</b></td>
+      <td class="right">${senior(p)?'<span class="flag">REVIEW</span>':''}</td>
+    </tr>`).join("");
+  return `
+   <div class="controls">
+     <div>Policy
+       <span class="seg" id="polseg">
+         <button data-pol="safety_first" class="${policy==='safety_first'?'active':''}">safety_first</button>
+         <button data-pol="throughput" class="${policy==='throughput'?'active':''}">throughput</button>
+       </span>
+     </div>
+     <label class="chk"><input type="checkbox" id="f_risk" ${filters.risk?'checked':''}/> high-risk</label>
+     <label class="chk"><input type="checkbox" id="f_unc" ${filters.unc?'checked':''}/> high-uncertainty</label>
+     <label class="chk"><input type="checkbox" id="f_wait" ${filters.wait?'checked':''}/> waited ≥3h</label>
+     <span class="muted">${list.length} of ${D.patients.length} waiting</span>
+   </div>
+   <div class="card"><table>
+     <thead><tr><th>ESI</th><th>ID</th><th>Age/Sex</th><th>Arrival</th><th>System</th>
+       <th class="right">P(crit)</th><th class="right">P(admit)</th><th class="right">Entropy</th>
+       <th class="right">Wait</th><th>Resource bucket</th><th class="right">Priority</th><th></th></tr></thead>
+     <tbody>${rows}</tbody></table></div>`;
+}
+
+// ---------- Patient ----------
+function normalize(text){
+  const t = (text||"").toLowerCase();
+  const parts = (text||"").split(",");
+  const core = parts[0].trim();
+  const qual = parts.slice(1).map(s=>s.trim()).filter(Boolean);
+  const flags = RED_FLAGS.filter(f=>t.includes(f.trim()));
+  return {core, qual, flags};
+}
+function caseSummary(p){
+  const sev = p.acuity<=2?"high-acuity":(p.acuity==3?"moderate-acuity":"lower-acuity");
+  return `${p.age}y ${p.sex}, arrived by ${p.arrival_mode} (${p.shift} shift) with a
+   ${p.chief_complaint_system} complaint. Structured physiology (NEWS2 ${p.news2_score}, SpO₂ ${p.spo2},
+   HR ${p.heart_rate}) supports a ${sev} assessment → predicted ESI ${p.acuity},
+   admission risk ${fmtpct(p.p_admit)}, expected LOS ${p.pred_los}h.`;
+}
+function renderPatient(){
+  const p = selected;
+  const probs = [1,2,3,4,5].map(a=>({a,v:p["p_acuity"+a]||0}));
+  const probBars = probs.map(x=>`
+    <div class="kv"><span><span class="pill ${aclass(x.a)}">${x.a}</span></span>
+      <span style="flex:1;margin:0 10px"><span class="bar"><i style="width:${(x.v*100).toFixed(1)}%;
+      background:var(${acuityColors[x.a]})"></i></span></span>
+      <span class="right" style="width:46px">${fmtpct(x.v)}</span></div>`).join("");
+  const nz = normalize(p.chief_complaint_raw);
+  const painMissing = (p.pain_score==null||p.pain_score==-1);
+  const override = (p.news2_score>=7 || p.spo2<90 || p.gcs_total<=13);
+  return `
+   <div class="controls"><button class="seg" onclick="go('queue')" style="padding:7px 14px;color:var(--accent)">← Queue</button>
+     <b>${p.patient_id}</b> <span class="pill ${aclass(p.acuity)}">ESI ${p.acuity}</span>
+     ${senior(p)?'<span class="flag">SENIOR REVIEW</span>':''}</div>
+   <div class="row">
+     <div class="card col"><h3>Intake & context</h3>
+       <div class="kv"><span class="muted">Age / Sex</span><span>${p.age} / ${p.sex}</span></div>
+       <div class="kv"><span class="muted">Language / Insurance</span><span>${p.language} / ${p.insurance_type}</span></div>
+       <div class="kv"><span class="muted">Arrival</span><span>${p.arrival_mode} · ${p.shift}</span></div>
+       <div class="kv"><span class="muted">NEWS2 / SpO₂</span><span>${p.news2_score} / ${p.spo2}</span></div>
+       <div class="kv"><span class="muted">HR / RR / SBP</span><span>${p.heart_rate} / ${p.respiratory_rate} / ${p.systolic_bp}</span></div>
+       <div class="kv"><span class="muted">GCS / Pain</span><span>${p.gcs_total} / ${painMissing?'<i>not assessed</i>':p.pain_score}</span></div>
+       <div class="kv"><span class="muted">Mental status</span><span>${p.mental_status_triage}</span></div>
+       <div class="kv"><span class="muted">Comorbidities</span><span>${p.num_comorbidities}</span></div>
+       <div class="note">Chief complaint (raw): “${p.chief_complaint_raw}”</div>
+     </div>
+     <div class="card col"><h3>Prediction (text-blind)</h3>
+       ${probBars}
+       <div class="kv" style="margin-top:8px"><span class="muted">Admission risk</span><span>${fmtpct(p.p_admit)}</span></div>
+       <div class="kv"><span class="muted">Predicted ED LOS</span><span>${p.pred_los} h</span></div>
+       <div class="kv"><span class="muted">Resource bucket</span><span>${p.bucket}</span></div>
+       <div class="kv"><span class="muted">Uncertainty (entropy)</span><span>${p.entropy.toFixed(3)} ${p.entropy>=M.ent_hi?'· high':''}</span></div>
+       <div class="note">Probabilities are isotonic-calibrated (val ECE 0.012).</div>
+     </div>
+     <div class="card col assist"><h3>AI assist <span class="tag">offline · advisory</span></h3>
+       <div class="note"><b>Normalized complaint:</b> ${nz.core}${nz.qual.length?' — '+nz.qual.join(', '):''}
+         ${nz.flags.length?`<br><span class="redflag">red flags: ${nz.flags.join(', ')}</span>`:''}</div>
+       <div class="note"><b>Case summary:</b> ${caseSummary(p)}</div>
+       <div class="note"><b>Why this priority:</b> urgency from ESI ${p.acuity}, P(critical) ${fmtpct(p.p_critical)},
+         ${p.entropy>=M.ent_hi?'high uncertainty → flagged for review':'confident prediction'}.</div>
+       <div class="note"><b>Physiology safety net:</b> ${override
+         ? '<span class="redflag">would trigger</span> (NEWS2/SpO₂/GCS high-risk) — caps at ESI ≤3 in a real ED.'
+         : 'would not trigger.'}</div>
+       <div class="note muted">Guideline rationale (RAG) attaches here for ambiguous/novel complaints when an API key is set.</div>
+     </div>
+   </div>`;
+}
+
+// ---------- Ops ----------
+function renderOps(){
+  const c = D.cohort;
+  const order = ["resuscitation/immediate bed","high-frequency monitoring","standard bed","fast-track/minor care","likely discharge"];
+  const max = Math.max(...Object.values(c.bucket_counts));
+  const bars = order.map(b=>{const n=c.bucket_counts[b]||0;return `
+     <div class="kv"><span style="width:210px">${b}</span>
+       <span style="flex:1;margin:0 10px"><span class="bar"><i style="width:${(n/max*100).toFixed(0)}%"></i></span></span>
+       <span class="right" style="width:60px">${n.toLocaleString()}</span></div>`;}).join("");
+  const shifts = c.shift_flow.map(s=>`<tr><td>${s.shift}</td><td class="right">${s.n.toLocaleString()}</td>
+     <td class="right">${s.expected_admissions}</td><td class="right">${fmtpct(s.admission_rate)}</td>
+     <td class="right">${s.senior_review}</td><td class="right">${s.mean_los}h</td></tr>`).join("");
+  const bp = c.snapshot_bed_pressure;
+  return `
+   <div class="row">
+     <div class="card kpi"><div class="v">${c.expected_admissions.toLocaleString()}</div><div class="l">expected admissions (cohort ${M.cohort_n.toLocaleString()})</div></div>
+     <div class="card kpi"><div class="v">${fmtpct(c.admission_rate)}</div><div class="l">admission rate</div></div>
+     <div class="card kpi"><div class="v">${c.mean_los}h</div><div class="l">mean predicted LOS</div></div>
+     <div class="card kpi"><div class="v" style="color:${bp>1?'var(--a1)':bp>0.8?'var(--a2)':'var(--a4)'}">${bp}</div>
+        <div class="l">bed pressure (snapshot · ${M.n_beds} beds)</div></div>
+   </div>
+   <div class="row" style="margin-top:16px">
+     <div class="card col"><h3>Resource bucket mix (full cohort)</h3>${bars}</div>
+     <div class="card col"><h3>Flow by shift <span class="muted">(flow, not census)</span></h3>
+       <table><thead><tr><th>Shift</th><th class="right">Arrivals</th><th class="right">Exp. admits</th>
+         <th class="right">Admit rate</th><th class="right">Senior review</th><th class="right">Mean LOS</th></tr></thead>
+         <tbody>${shifts}</tbody></table></div>
+   </div>`;
+}
+
+// ---------- router ----------
+let view = "queue";
+function render(){
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+  const el = document.getElementById("app");
+  el.innerHTML = view==="queue"?renderQueue():view==="patient"?renderPatient():renderOps();
+  if(view==="queue"){
+    document.querySelectorAll("#polseg button").forEach(b=>b.onclick=()=>{policy=b.dataset.pol;render();});
+    ["risk","unc","wait"].forEach(k=>{const e=document.getElementById("f_"+k);if(e)e.onchange=()=>{filters[k]=e.checked;render();};});
+  }
+}
+function go(v,id){ view=v; if(id){selected=D.patients.find(p=>p.patient_id===id)||selected;} render(); window.scrollTo(0,0); }
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.view));
+render();
+</script>
+</body>
+</html>
