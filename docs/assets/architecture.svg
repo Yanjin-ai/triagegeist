@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 540" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="920" height="540" rx="14" fill="#0f1419"/>
+  <text x="32" y="44" fill="#e6edf3" font-size="22" font-weight="700">🚑 Triage Copilot — system architecture</text>
+  <text x="32" y="68" fill="#8b98a8" font-size="13">Honest core: a text-blind structured model, wrapped in calibration, governance, operations, and supervisable interfaces.</text>
+
+  <!-- left data rail -->
+  <rect x="32" y="92" width="150" height="396" rx="10" fill="#13202e" stroke="#25415c"/>
+  <text x="48" y="118" fill="#4aa3ff" font-size="13" font-weight="700">DATA PIPELINE</text>
+  <text x="48" y="142" fill="#cfd8e3" font-size="11.5">leakage-safe join</text>
+  <text x="48" y="162" fill="#cfd8e3" font-size="11.5">stratified split</text>
+  <text x="48" y="182" fill="#cfd8e3" font-size="11.5">pain sentinel →</text>
+  <text x="48" y="198" fill="#cfd8e3" font-size="11.5">missing flag</text>
+  <text x="48" y="222" fill="#cfd8e3" font-size="11.5">outcomes excluded</text>
+  <text x="48" y="238" fill="#8b98a8" font-size="11">(no leakage)</text>
+  <text x="48" y="470" fill="#8b98a8" font-size="11">src/data · src/features</text>
+
+  <!-- L1 prediction -->
+  <rect x="206" y="92" width="682" height="86" rx="10" fill="#161c24" stroke="#2a3441"/>
+  <text x="224" y="118" fill="#3ecf8e" font-size="13" font-weight="700">L1 · PREDICTION (text-blind)</text>
+  <text x="224" y="142" fill="#cfd8e3" font-size="12">structured GBDT → acuity (ESI 1–5) · QWK ≈ 0.93</text>
+  <text x="224" y="162" fill="#cfd8e3" font-size="12">aux heads → admission risk · ED length-of-stay</text>
+  <rect x="690" y="108" width="180" height="54" rx="8" fill="#13351f" stroke="#1f5235"/>
+  <text x="704" y="130" fill="#3ecf8e" font-size="11.5" font-weight="700">model_structured_v1</text>
+  <text x="704" y="148" fill="#8b98a8" font-size="11">complaint text never seen</text>
+
+  <!-- L2 governance -->
+  <rect x="206" y="188" width="682" height="86" rx="10" fill="#161c24" stroke="#2a3441"/>
+  <text x="224" y="214" fill="#f5c518" font-size="13" font-weight="700">L2 · GOVERNANCE</text>
+  <g font-size="11.5" fill="#0f1419" font-weight="600">
+    <rect x="224" y="226" width="138" height="30" rx="6" fill="#cfd8e3"/><text x="234" y="246">isotonic calibration</text>
+    <rect x="372" y="226" width="150" height="30" rx="6" fill="#cfd8e3"/><text x="382" y="246">conformal sets (APS)</text>
+    <rect x="532" y="226" width="150" height="30" rx="6" fill="#cfd8e3"/><text x="542" y="246">subgroup fairness + CI</text>
+    <rect x="692" y="226" width="150" height="30" rx="6" fill="#cfd8e3"/><text x="702" y="246">error taxonomy / OOD</text>
+  </g>
+
+  <!-- L3 operations -->
+  <rect x="206" y="284" width="682" height="86" rx="10" fill="#161c24" stroke="#2a3441"/>
+  <text x="224" y="310" fill="#ff8c3b" font-size="13" font-weight="700">L3 · OPERATIONS</text>
+  <g font-size="11.5" fill="#0f1419" font-weight="600">
+    <rect x="224" y="322" width="150" height="30" rx="6" fill="#cfd8e3"/><text x="234" y="342">resource buckets</text>
+    <rect x="384" y="322" width="170" height="30" rx="6" fill="#cfd8e3"/><text x="394" y="342">queue priority (policies)</text>
+    <rect x="564" y="322" width="130" height="30" rx="6" fill="#cfd8e3"/><text x="574" y="342">ED-load view</text>
+    <rect x="704" y="322" width="138" height="30" rx="6" fill="#cfd8e3"/><text x="714" y="342">human deferral</text>
+  </g>
+
+  <!-- L4 interfaces -->
+  <rect x="206" y="380" width="682" height="86" rx="10" fill="#161c24" stroke="#2a3441"/>
+  <text x="224" y="406" fill="#4aa3ff" font-size="13" font-weight="700">L4 · INTERFACES</text>
+  <g font-size="11.5" fill="#04121f" font-weight="600">
+    <rect x="224" y="418" width="170" height="30" rx="6" fill="#4aa3ff"/><text x="234" y="438">dashboard (3 views)</text>
+    <rect x="404" y="418" width="180" height="30" rx="6" fill="#4aa3ff"/><text x="414" y="438">live inference (form/API)</text>
+    <rect x="594" y="418" width="120" height="30" rx="6" fill="#4aa3ff"/><text x="604" y="438">audit log</text>
+    <rect x="724" y="418" width="118" height="30" rx="6" fill="#4aa3ff"/><text x="734" y="438">AI assist</text>
+  </g>
+
+  <text x="206" y="500" fill="#8b98a8" font-size="11.5">Every decision carries: decision chain · data provenance · multi-party oversight (nurse · senior physician · equity auditor · ops) · audit trail</text>
+</svg>

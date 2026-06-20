@@ -56,6 +56,29 @@ plus the optimizations we adopted and the ones we deliberately did not.
   `src/serve/infer.py`). This is the single most defensible "advanced algorithm" upgrade for a safety-critical
   triage setting, and it composes with our calibration and fairness layers.
 
+## Capability maturity vs deployed medical-AI products (honest)
+TRL = Technology Readiness Level (1 research idea → 9 deployed at scale).
+
+| Capability | Mature products (KATE / Aidoc) | **This project** | Verdict |
+|---|---|---|---|
+| Predictive model | validated on real multi-site EHR | GBDT on synthetic, leakage-aware | ✅ method sound, ❌ data not real |
+| Calibration | yes | isotonic, ECE reported | ✅ on par in principle |
+| Uncertainty / deferral | selective prediction | **conformal sets + deferral** | ✅ current best practice |
+| Fairness monitoring | required, continuous | one-shot bootstrap-CI audit | 🟡 audited, not continuous |
+| Explainability / CDS basis | yes (for CDS exemption) | decision chain + provenance | ✅ aligned |
+| Human-in-the-loop + audit | yes | oversight roles + audit log | ✅ pattern shown |
+| EHR / FHIR integration | HL7v2 / FHIR R4, real-time | JSON dict API (stub) | ❌ not integrated |
+| Regulatory (FDA SaMD/GMLP) | cleared / breakthrough | none | ❌ |
+| Prospective / external validation | yes (e.g. KATE on 166k visits) | internal val on synthetic | ❌ |
+| Drift / lifecycle monitoring | continuous | OOD proxy only | ❌ |
+| Security / privacy / governance | HIPAA/GDPR, auth, RBAC | none (synthetic) | ❌ |
+| **Overall** | **TRL 8–9** | **TRL 3–4** | research prototype |
+
+**Bottom line:** we are *principle-aligned* with deployed products on the trustworthiness axes that matter most
+for safety (calibration, conformal uncertainty, fairness, explainability, human oversight) — the very things the
+Epic Sepsis Model lacked — but we are *infrastructure- and validation-incomplete* (regulation, FHIR, prospective
+external validation, monitoring, security). None of those gaps are closable from a synthetic single-source dataset.
+
 ## Prioritized optimization roadmap (if continuing)
 1. **TabPFN/CatBoost ensemble member** + stacking — marginal QWK lift, bounded by the leakage ceiling.
 2. **Group-aware conformal / Mondrian conformal** — per-subgroup coverage so equity holds *with* the guarantee.
