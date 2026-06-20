@@ -25,6 +25,7 @@ from ..models.aux_heads import fit_aux
 from ..models.structured import fit_tabular
 from ..ops.prioritize import POLICIES, needs_senior_review, priority_score
 from ..ops.resource_map import assign_bucket
+from .governance import data_provenance, decision_trace, oversight
 
 CLASSES = np.array([1, 2, 3, 4, 5])
 RED_FLAGS = ["haemorrhage", "hemorrhage", "sepsis", "septic", "arrest", "unresponsive",
@@ -53,6 +54,9 @@ class TriageEngine:
         self.aux = fit_aux(train, val, test, cfg)
         self.ent_hi = float(np.nanpercentile(
             -(self.iso.transform(self.tab.p_val) * np.log(np.clip(self.iso.transform(self.tab.p_val), 1e-12, 1))).sum(1), 75))
+        ft = self.tab.ft
+        self.required_raw = sorted((set(ft.numeric) | set(ft.categorical) | set(ft._hx_cols)
+                                    | {"pain_score", "systolic_bp"}) - {ft.text_col})
         self.built = True
         return self
 
@@ -70,18 +74,27 @@ class TriageEngine:
         df = pd.DataFrame([intake])
         raw = self.tab.predict_proba(df)            # raw model scores (for conformal)
         proba = self.iso.transform(raw)[0]          # calibrated (for display / acuity)
-        acuity = int(CLASSES[proba.argmax()])
+        model_acuity = int(CLASSES[proba.argmax()])
         p_crit = float(proba[0] + proba[1])
         ent = float(-(np.clip(proba, 1e-12, 1) * np.log(np.clip(proba, 1e-12, 1))).sum())
         pred_set = self.conf.predict_sets(raw)[0]
+        override_triggered = bool(
+            (intake.get("news2_score") or 0) >= 7 or (intake.get("spo2") or 100) < 90
+            or (intake.get("gcs_total") or 15) <= 13)
+        # safety net APPLIED: high-risk physiology caps the suggestion at ESI ≤3
+        acuity = min(model_acuity, 3) if override_triggered else model_acuity
         p_admit, los = self.aux.predict(df)
         p_admit, los = float(p_admit[0]), float(los[0])
         bucket = assign_bucket([acuity], [p_admit], [los]).iloc[0]
-        prio = float(priority_score([acuity], [p_crit], [ent], [intake.get("wait_hours", 0.0)], policy)[0])
+        prio = round(float(priority_score([acuity], [p_crit], [ent], [intake.get("wait_hours", 0.0)], policy)[0]), 4)
         defer = len(pred_set) > 1 or bool(needs_senior_review([acuity], [p_crit], [ent], self.ent_hi)[0])
-        return {
+
+        prob_map = {int(c): round(float(p), 4) for c, p in zip(CLASSES, proba)}
+        prov = data_provenance(intake, self.required_raw)
+        result = {
             "acuity": acuity,
-            "acuity_proba": {int(c): round(float(p), 4) for c, p in zip(CLASSES, proba)},
+            "model_acuity": model_acuity,
+            "acuity_proba": prob_map,
             "conformal_set": pred_set,
             "conformal_coverage": round(1 - self.alpha, 2),
             "p_critical": round(p_crit, 4),
@@ -90,9 +103,15 @@ class TriageEngine:
             "resource_bucket": bucket,
             "priority": round(prio, 4),
             "uncertainty_entropy": round(ent, 4),
+            "safety_override_triggered": override_triggered,
             "defer_to_human": defer,
             "complaint_trace": self._normalize(intake.get("chief_complaint_raw")),
+            "data_provenance": prov,
+            "decision_trace": decision_trace(prov, prob_map, pred_set, acuity, self.alpha,
+                                             override_triggered, bucket, prio, policy, defer),
+            "oversight": oversight(intake, acuity, p_crit, defer, override_triggered, bucket),
         }
+        return result
 
 
 EXAMPLES = [

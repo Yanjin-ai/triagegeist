@@ -10,6 +10,7 @@ triagegeist/
 app/data.js
 app/data.json
 submission*.csv
+reports/audit_log.jsonl
 
 # Models / artifacts
 *.pt
