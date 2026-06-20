@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8077", "--directory", "app"],
       "port": 8077
+    },
+    {
+      "name": "triage-serve",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "src.serve.app"],
+      "port": 8078
     }
   ]
 }

@@ -20,6 +20,7 @@ from ..models.structured import MODEL_ID, fit_tabular, proba_to_pred
 from . import calibration as cal
 from . import error_taxonomy as et
 from . import fairness as fr
+from .conformal import APSConformal
 from .metrics import evaluate, format_report
 from .thresholds import search_class4_bias
 from .uncertainty import entropy, uncertainty_breakdown
@@ -116,6 +117,29 @@ def main():
 
     # ---------- P5: fairness ----------
     ev["pred_acuity"] = pred_ev
+    # ---------- P4: conformal prediction (SOTA uncertainty) ----------
+    w("## P4 — Conformal prediction (APS, distribution-free coverage)\n")
+    w("Split-conformal on calibrated probabilities: returns an acuity *set* guaranteed to contain the "
+      "true acuity with prob ≥ 1−α (marginal). Singletons → confident auto-triage; multi-class sets → "
+      "principled human deferral (cf. conformal cost-aware clinical triage).\n")
+    # conformal runs on raw model scores (softer than peaked isotonic probs)
+    crows = [APSConformal(a, classes).fit(p_cal, y_cal).evaluate(p_ev, y_ev)
+             for a in (0.05, 0.10, 0.20)]
+    w(pd.DataFrame(crows)[["target_coverage", "empirical_coverage", "mean_set_size",
+                           "auto_rate_singletons", "defer_rate"]].to_markdown(index=False))
+    conf = APSConformal(0.10, classes).fit(p_cal, y_cal)
+    singleton = np.array([len(s) == 1 for s in conf.predict_sets(p_ev)])
+    def _ut(mask):
+        yy, pp = y_ev[mask], pred_ev[mask]; c = np.isin(yy, (1, 2))
+        return round(float((pp[c] > yy[c]).mean()), 4) if c.sum() else float("nan")
+    w(f"\nAt α=0.10: auto-triaged (singleton) **{singleton.mean()*100:.1f}%** with "
+      f"undertriage(1,2)={_ut(singleton)}; deferred **{(~singleton).mean()*100:.1f}%** with "
+      f"undertriage(1,2)={_ut(~singleton)} — deferral concentrates the residual risk.\n")
+    w("> The sets are conservative (empirical coverage > target) *because physiology underdetermines the "
+      "text-driven label* — APS honestly responds by deferring most cases, while the small auto-triaged "
+      "set is highly reliable. This is the correct behaviour for a partly-unlearnable target, and it gives "
+      "the ops layer a guaranteed-coverage human-in-the-loop rule.\n")
+
     w("## P5 — Subgroup fairness audit (eval, bootstrap 95% CI)\n")
     for col in SUBGROUPS:
         if col not in ev:

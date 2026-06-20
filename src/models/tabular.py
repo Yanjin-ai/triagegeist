@@ -25,6 +25,12 @@ class TabularResult:
     p_test: np.ndarray     # (n_test, 5)
     ft: FeatureTransformer
     model: object
+    cols: list | None = None
+
+    def predict_proba(self, df) -> np.ndarray:
+        """Score an arbitrary frame (e.g. a single intake) → (n, 5) aligned to 1..5."""
+        X = self.ft.transform(df)[self.cols]
+        return _align_proba(self.model, X)
 
 
 def _align_proba(model, X) -> np.ndarray:
@@ -70,7 +76,7 @@ def fit_tabular(train, val, test, cfg) -> TabularResult:
         model.fit(Xtr, ytr, sample_weight=sw)
 
     return TabularResult(engine, CLASSES, _align_proba(model, Xva),
-                         _align_proba(model, Xte), ft, model)
+                         _align_proba(model, Xte), ft, model, cols)
 
 
 def proba_to_pred(p: np.ndarray) -> np.ndarray:

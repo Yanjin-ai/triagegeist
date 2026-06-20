@@ -24,6 +24,14 @@ class AuxResult:
     p_admit_test: np.ndarray
     los_val: np.ndarray
     los_test: np.ndarray
+    clf: object = None
+    reg: object = None
+    ft: object = None
+    cols: list = None
+
+    def predict(self, df):
+        X = self.ft.transform(df)[self.cols]
+        return self.clf.predict_proba(X)[:, 1], np.clip(self.reg.predict(X), 0, None)
 
 
 def fit_aux(train, val, test, cfg) -> AuxResult:
@@ -51,4 +59,5 @@ def fit_aux(train, val, test, cfg) -> AuxResult:
     return AuxResult(
         clf.predict_proba(Xva)[:, 1], clf.predict_proba(Xte)[:, 1],
         np.clip(reg.predict(Xva), 0, None), np.clip(reg.predict(Xte), 0, None),
+        clf=clf, reg=reg, ft=ft, cols=cols,
     )

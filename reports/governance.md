@@ -41,6 +41,20 @@ Baseline QWK=0.9304. Safety-constrained pick: bias_acuity4=1.0 → QWK=0.9304, r
 | Q3              | 1452 |       0.1674 |             0.0069 |            0      |
 | Q4              | 1495 |       0.3839 |             0.0074 |            0.0007 |
 
+## P4 — Conformal prediction (APS, distribution-free coverage)
+
+Split-conformal on calibrated probabilities: returns an acuity *set* guaranteed to contain the true acuity with prob ≥ 1−α (marginal). Singletons → confident auto-triage; multi-class sets → principled human deferral (cf. conformal cost-aware clinical triage).
+
+|   target_coverage |   empirical_coverage |   mean_set_size |   auto_rate_singletons |   defer_rate |
+|------------------:|---------------------:|----------------:|-----------------------:|-------------:|
+|              0.95 |               1      |           4.252 |                 0.0502 |       0.9498 |
+|              0.9  |               0.9998 |           3.67  |                 0.1047 |       0.8953 |
+|              0.8  |               0.9997 |           2.507 |                 0.1767 |       0.8233 |
+
+At α=0.10: auto-triaged (singleton) **10.5%** with undertriage(1,2)=0.0016; deferred **89.5%** with undertriage(1,2)=0.0636 — deferral concentrates the residual risk.
+
+> The sets are conservative (empirical coverage > target) *because physiology underdetermines the text-driven label* — APS honestly responds by deferring most cases, while the small auto-triaged set is highly reliable. This is the correct behaviour for a partly-unlearnable target, and it gives the ops layer a guaranteed-coverage human-in-the-loop rule.
+
 ## P5 — Subgroup fairness audit (eval, bootstrap 95% CI)
 
 

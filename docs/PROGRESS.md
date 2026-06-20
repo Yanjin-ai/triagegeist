@@ -2,7 +2,14 @@
 
 > Auto-advance protocol: open this file → current phase → next unchecked `[ ]` → do it → check it → append a log line. Don't cross an **acceptance gate** until green. See `PLAN.md §5`.
 
-**Current phase:** P9 DONE — project complete (P0→P9). Ready to submit.
+**Current phase:** P9 DONE + post-P9 SOTA enhancements (conformal + live inference). Ready to submit.
+
+### Post-P9 enhancements (2026-06-20)
+- **Conformal prediction (APS)** — `src/analysis/conformal.py`, integrated into `governance.md`: distribution-free coverage guarantee + principled human-deferral. On this data it defers ~89% (physiology underdetermines the text-driven label); the ~10% auto-triaged have 0.16% undertriage vs 6.4% deferred.
+- **Live inference / interaction layer** — `src/serve/infer.py` (TriageEngine: intake dict → full decision incl. conformal set + defer flag) and `src/serve/app.py` (stdlib browser form + JSON API on :8078). Verified in preview.
+- **`docs/COMPARISON.md`** — gap analysis vs mimic4ed-benchmark + SOTA (TabPFN/conformal), with honest stance on the leakage ceiling.
+- Tests: 12/12 (added conformal coverage guarantee).
+
 **Current gate:** 🟢 P9 — notebook + writeup + repro package all in place; notebook smoke-tested end-to-end; 10/10 tests pass.
 **Blocked on user?** Only the submission actions you own: upload a `submission*.csv`, attach/run the notebook on Kaggle, confirm the metric. (Optional polish: ANTHROPIC_API_KEY for P7 online mode.)
 

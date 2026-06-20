@@ -7,6 +7,7 @@ tree baselines ignore it. Leakage columns are never emitted.
 """
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 
 from ..config import load_config
@@ -56,6 +57,11 @@ class FeatureTransformer:
 
     def transform(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.copy()
+        # serving-robust: ensure every expected input column exists (partial intakes)
+        needed = set(self.numeric) | set(self.categorical) | set(self._hx_cols) \
+            | {"pain_score", "systolic_bp", self.text_col}
+        for c in needed - set(df.columns):
+            df[c] = np.nan
         # pain_score sentinel -> NaN + explicit missing flag
         df["pain_missing"] = (df["pain_score"] == self.pain_sentinel).astype("int8")
         df.loc[df["pain_score"] == self.pain_sentinel, "pain_score"] = pd.NA
