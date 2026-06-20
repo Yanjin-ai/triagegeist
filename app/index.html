@@ -26,7 +26,7 @@
   nav button.active{color:var(--text);border-bottom-color:var(--accent)}
   main{padding:18px 20px;max-width:1280px}
   .row{display:flex;gap:16px;flex-wrap:wrap}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto}
   .controls{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
   .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
   .seg button{background:var(--panel);border:none;color:var(--muted);padding:7px 14px;cursor:pointer;font-size:13px}
@@ -34,6 +34,7 @@
   label.chk{color:var(--muted);font-size:12.5px;display:inline-flex;align-items:center;gap:5px;cursor:pointer}
   table{width:100%;border-collapse:collapse;font-size:13px}
   th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td.wrap{white-space:normal;min-width:240px}
   th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
   tbody tr{cursor:pointer}
   tbody tr:hover{background:var(--panel2)}
@@ -266,7 +267,7 @@ function renderAudit(){
       ? `“${e.complaint||''}” · reviewers: ${(e.required_reviewers||[]).join(', ')||'—'}`
       : `re: decision #${e.decision_id} — ${e.reason||''}`;
     return `<tr><td class="right">${e.id}</td><td class="muted">${e.ts||''}</td>
-      <td>${e.event==='decision'?'decision':'human action'}</td><td>${who}</td><td class="muted">${detail}</td></tr>`;
+      <td>${e.event==='decision'?'decision':'human action'}</td><td>${who}</td><td class="muted wrap">${detail}</td></tr>`;
   }).join("");
   return `<div class="controls"><span class="muted">Append-only accountability log — model suggestions and the human actions taken on them
     (illustrative sample; the live server writes <code>reports/audit_log.jsonl</code>).</span></div>
