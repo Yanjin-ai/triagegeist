@@ -69,6 +69,7 @@
   <button data-view="queue" class="active">Queue</button>
   <button data-view="patient">Patient</button>
   <button data-view="ops">Ops console</button>
+  <button data-view="audit">Audit log</button>
 </nav>
 <main id="app"></main>
 
@@ -253,12 +254,33 @@ function renderOps(){
    </div>`;
 }
 
+// ---------- Audit ----------
+function renderAudit(){
+  const a=(D.audit||[]).slice().reverse();
+  if(!a.length) return `<div class="card">No audit entries. Use the live inference server (<code>python -m src.serve.app</code>) to generate them.</div>`;
+  const rows=a.map(e=>{
+    const who=e.event==="decision"
+      ? `model ${e.model_acuity} → <span class="pill ${aclass(e.acuity)}">${e.acuity}</span>${e.override?' <span class="flag">override</span>':''}${e.defer?' <span class="flag">defer</span>':''}`
+      : `<b>${e.party}</b>: ${e.action==='override'?'<span class="flag">override</span>':e.action}`;
+    const detail=e.event==="decision"
+      ? `“${e.complaint||''}” · reviewers: ${(e.required_reviewers||[]).join(', ')||'—'}`
+      : `re: decision #${e.decision_id} — ${e.reason||''}`;
+    return `<tr><td class="right">${e.id}</td><td class="muted">${e.ts||''}</td>
+      <td>${e.event==='decision'?'decision':'human action'}</td><td>${who}</td><td class="muted">${detail}</td></tr>`;
+  }).join("");
+  return `<div class="controls"><span class="muted">Append-only accountability log — model suggestions and the human actions taken on them
+    (illustrative sample; the live server writes <code>reports/audit_log.jsonl</code>).</span></div>
+   <div class="card"><table>
+     <thead><tr><th class="right">#</th><th>Time</th><th>Event</th><th>Decision / actor</th><th>Detail</th></tr></thead>
+     <tbody>${rows}</tbody></table></div>`;
+}
+
 // ---------- router ----------
 let view = "queue";
 function render(){
   document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
   const el = document.getElementById("app");
-  el.innerHTML = view==="queue"?renderQueue():view==="patient"?renderPatient():renderOps();
+  el.innerHTML = view==="queue"?renderQueue():view==="patient"?renderPatient():view==="audit"?renderAudit():renderOps();
   if(view==="queue"){
     document.querySelectorAll("#polseg button").forEach(b=>b.onclick=()=>{policy=b.dataset.pol;render();});
     ["risk","unc","wait"].forEach(k=>{const e=document.getElementById("f_"+k);if(e)e.onchange=()=>{filters[k]=e.checked;render();};});

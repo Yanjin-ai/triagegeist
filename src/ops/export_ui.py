@@ -78,6 +78,25 @@ def main():
                 "mean_los": round(float(sub["pred_los"].mean()), 2),
             })
 
+    # illustrative audit trail (decisions + a couple of human actions) from the same engine
+    audit, aid = [], 0
+    govp = [p for p in patients if p.get("governance")][:8]
+    for i, p in enumerate(govp):
+        g = p["governance"]; aid += 1
+        defer = any(s["stage"] == "disposition" and "DEFER" in s["detail"] for s in g["decision_trace"])
+        audit.append({"id": aid, "ts": f"2026-06-20T03:{10+i:02d}:00", "event": "decision",
+                      "complaint": p.get("chief_complaint_raw"), "model_acuity": g["model_acuity"],
+                      "acuity": g["decision_acuity"], "defer": defer,
+                      "override": g["safety_override_triggered"],
+                      "required_reviewers": [o["party"] for o in g["oversight"] if o["required"]]})
+    if len(audit) >= 3:
+        audit.append({"id": aid + 1, "ts": "2026-06-20T03:21:00", "event": "human_action",
+                      "decision_id": audit[0]["id"], "party": "Triage nurse",
+                      "action": "confirm", "reason": "agrees with model suggestion"})
+        audit.append({"id": aid + 2, "ts": "2026-06-20T03:24:00", "event": "human_action",
+                      "decision_id": audit[2]["id"], "party": "Senior physician",
+                      "action": "override", "reason": "clinical gestalt: escalate despite model"})
+
     data = {
         "meta": {
             "model": "model_structured_v1 (text-blind)",
@@ -98,6 +117,7 @@ def main():
             "snapshot_bed_pressure": round(snap_bed_demand / N_BEDS, 2),
             "shift_flow": shift_flow,
         },
+        "audit": audit,
     }
 
     app_dir = ROOT / "app"
