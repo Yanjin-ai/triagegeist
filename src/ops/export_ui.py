@@ -41,7 +41,28 @@ def main():
     snap = df.sample(SNAPSHOT_N, random_state=7).reset_index(drop=True)
     ent_hi = float(np.nanpercentile(snap["entropy"], 75))
 
-    patients = [{k: _clean(v) for k, v in row.items()} for _, row in snap.iterrows()]
+    # enrich each snapshot patient with the SAME engine the live server uses, so the
+    # dashboard's decision chain / provenance / oversight match exactly.
+    from ..serve.infer import TriageEngine
+    eng = TriageEngine().build()
+    test_full = pd.read_parquet(processed_dir(cfg) / "test.parquet").set_index(cfg["data"]["id_col"])
+    idc = cfg["data"]["id_col"]
+    patients = []
+    for _, row in snap.iterrows():
+        rec = {k: _clean(v) for k, v in row.items()}
+        try:
+            full = test_full.loc[rec[idc]].to_dict()
+            r = eng.predict(full)
+            rec["governance"] = {
+                "model_acuity": r["model_acuity"], "decision_acuity": r["acuity"],
+                "safety_override_triggered": r["safety_override_triggered"],
+                "conformal_set": r["conformal_set"], "conformal_coverage": r["conformal_coverage"],
+                "decision_trace": r["decision_trace"], "data_provenance": r["data_provenance"],
+                "oversight": r["oversight"],
+            }
+        except Exception:
+            rec["governance"] = None
+        patients.append(rec)
 
     # full-cohort aggregates (flow), and snapshot census (point-in-time)
     bucket_counts = df["bucket"].value_counts().to_dict()

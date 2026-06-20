@@ -18,9 +18,18 @@ ELEVATED_UNDERTRIAGE_LANG = {"Estonian", "Swedish", "Somali", "English"}
 BED_BUCKETS = {"resuscitation/immediate bed", "high-frequency monitoring", "standard bed"}
 
 
+def _given(v) -> bool:
+    if v is None:
+        return False
+    try:
+        return not (isinstance(v, float) and v != v)  # NaN
+    except Exception:
+        return True
+
+
 def data_provenance(intake: dict, required_raw: list[str]) -> dict:
-    provided = [c for c in required_raw if intake.get(c) is not None]
-    imputed = [c for c in required_raw if intake.get(c) is None]
+    provided = [c for c in required_raw if _given(intake.get(c))]
+    imputed = [c for c in required_raw if not _given(intake.get(c))]
     pain = intake.get("pain_score")
     return {
         "features_required": len(required_raw),

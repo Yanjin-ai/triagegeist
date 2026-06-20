@@ -201,7 +201,26 @@ function renderPatient(){
          : 'would not trigger.'}</div>
        <div class="note muted">Guideline rationale (RAG) attaches here for ambiguous/novel complaints when an API key is set.</div>
      </div>
-   </div>`;
+   </div>${p.governance?govHTML(p.governance):''}`;
+}
+
+function govHTML(g){
+  const cap=g.model_acuity!==g.decision_acuity?` <span class="flag">(model ${g.model_acuity} → safety override ${g.decision_acuity})</span>`:"";
+  const cset=g.conformal_set.map(a=>`<span class="pill ${aclass(a)}">${a}</span>`).join(" ");
+  const trace=g.decision_trace.map(s=>`<li><b>${s.stage}</b>: ${s.detail}</li>`).join("");
+  const pv=g.data_provenance;
+  const ov=g.oversight.map(o=>`<div style="border-left:3px solid ${o.required?'#ff8c3b':'var(--line)'};padding:3px 10px;margin:5px 0">
+     <b>${o.party}</b> <span class="${o.required?'flag':'muted'}">${o.required?'REQUIRED':'optional'}</span><br>
+     <span class="muted">${o.action} — ${o.why}</span></div>`).join("");
+  return `<div class="row" style="margin-top:16px">
+    <div class="card col"><h3>Decision chain</h3><ol style="padding-left:18px;font-size:12.5px;margin:4px 0">${trace}</ol>
+      <div class="note">conformal set (${g.conformal_coverage*100}% coverage): ${cset}${cap}</div></div>
+    <div class="card col"><h3>Data provenance</h3>
+      <div class="kv"><span class="muted">features provided</span><span>${pv.features_provided}/${pv.features_required}</span></div>
+      <div class="note muted">${pv.pain_sentinel_handling}</div>
+      <div class="note muted">no-leakage: ${pv.no_leakage_attestation}</div></div>
+    <div class="card col"><h3>Multi-party oversight</h3>${ov}</div>
+  </div>`;
 }
 
 // ---------- Ops ----------
