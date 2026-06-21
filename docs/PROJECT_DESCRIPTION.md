@@ -28,7 +28,7 @@ clinician must see the reasoning, be able to override it, and have that recorded
 
 ## What we discovered — and why it shaped the whole project
 
-![the central finding](assets/leakage.svg)
+![the central finding](assets/leakage.png)
 
 A quick probe revealed the headline finding: **99.7%** of chief-complaint phrases map to exactly one acuity,
 and **99.8%** of test phrases appear verbatim in training. The label is a near-deterministic function of the
@@ -41,7 +41,7 @@ of the project — it's why the rest of the work (calibration, fairness, operati
 
 ## What we built
 
-![architecture](assets/architecture.svg)
+![architecture](assets/architecture.png)
 
 A four-layer stack over a leakage-safe data pipeline:
 
@@ -52,7 +52,7 @@ A four-layer stack over a leakage-safe data pipeline:
 
 ### Data processing (done carefully)
 
-![data pipeline](assets/data-pipeline.svg)
+![data pipeline](assets/data-pipeline.png)
 
 Four tables are joined on `patient_id`; the `pain = -1` "not assessed" sentinel becomes an explicit
 missing-flag (missingness is clinical signal, not noise); outcome columns are blocklisted so they can never
@@ -60,7 +60,7 @@ leak into features; and a **single transform** is used for training and serving 
 
 ## Every design choice answers a real challenge
 
-![design considerations](assets/design-tradeoffs.svg)
+![design considerations](assets/design-tradeoffs.png)
 
 Nothing here is decoration: label leakage → text-blind model; undertriage danger → balanced weights + a safety
 override; "a label isn't enough" → calibration; "know what you don't know" → conformal prediction sets;
@@ -69,7 +69,7 @@ boxes erode trust → a visible decision chain; accountability → an audit log.
 
 ## How a patient flows through it
 
-![business flow](assets/workflow.svg)
+![business flow](assets/workflow.png)
 
 A patient arrives, intake is structured, the engine produces calibrated risk and a conformal set, and the
 system **branches**: confident cases **auto-suggest** and flow fast (nurse confirms); ambiguous, critical, or
@@ -78,7 +78,7 @@ override caps high-risk physiology). Every step is written to an append-only aud
 
 ## How it behaves in real situations
 
-![scenarios](assets/scenarios.svg)
+![scenarios](assets/scenarios.png)
 
 The same engine reacts differently by case — escalate the critical one, **honestly defer** on the ambiguous
 one (where physiology genuinely can't resolve the answer), add **bias oversight** on an equity-flagged
@@ -86,7 +86,7 @@ patient, and fast-track the minor one. That behaviour *is* the product value.
 
 ## Every decision is explainable and supervised
 
-![decision chain](assets/decision-chain.svg)
+![decision chain](assets/decision-chain.png)
 
 Each prediction exposes its full **decision chain** (9 steps), its **data provenance** (which features were
 real vs imputed, plus a no-leakage attestation), and a **multi-party oversight** list that binds the triage
@@ -98,7 +98,7 @@ nurse, senior physician, equity auditor, and operations to concrete triggers —
 
 ## Honest about what this is
 
-![comparison](assets/comparison.svg)
+![comparison](assets/comparison.png)
 
 This is a **research prototype (≈ TRL 3–4)** on synthetic data — **not a clinical device**. It is
 *principle-aligned* with deployed products (Mednition KATE, Aidoc) on the trustworthiness axes that matter

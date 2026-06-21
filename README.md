@@ -13,7 +13,7 @@
 
 </div>
 
-![architecture](docs/assets/architecture.svg)
+![architecture](docs/assets/architecture.png)
 
 ---
 
@@ -33,19 +33,19 @@ structured-physiology model (QWK ≈ 0.93)** and invest in the things that actua
 Every prediction exposes its full chain, its data provenance, and the parties who must review it — and writes
 to an append-only audit log.
 
-![decision chain](docs/assets/decision-chain.svg)
+![decision chain](docs/assets/decision-chain.png)
 
 ## How it works · how it reacts
 *(full visual deck: [`docs/PRESENTATION.md`](docs/PRESENTATION.md) — data processing, design trade-offs, more)*
 
 **Business flow** — confident cases auto-suggest and flow fast; critical / ambiguous / equity-sensitive cases defer to a human; every step is audit-logged.
-![workflow](docs/assets/workflow.svg)
+![workflow](docs/assets/workflow.png)
 
 **Scenario reactions** — the same engine behaves differently by case:
-![scenarios](docs/assets/scenarios.svg)
+![scenarios](docs/assets/scenarios.png)
 
 **Design considerations** — each choice answers a specific clinical or data challenge:
-![design tradeoffs](docs/assets/design-tradeoffs.svg)
+![design tradeoffs](docs/assets/design-tradeoffs.png)
 
 ## Capabilities
 

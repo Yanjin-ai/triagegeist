@@ -9,7 +9,7 @@ Code, interactive prototype, and full reports: GitHub repo linked at the end.*
 > and surround it with calibration, conformal uncertainty, fairness auditing, an operations console, and a
 > supervisable, audit-logged decision workflow.
 
-![architecture](assets/architecture.svg)
+![architecture](assets/architecture.png)
 
 ---
 
@@ -41,7 +41,7 @@ grouped comorbidity counts, and blocklist the outcome columns so they can never 
 **2.2 The central finding — and the design decision it forces.**
 A simple probe showed the acuity label is essentially encoded in the complaint phrase:
 
-![label leakage](assets/leakage.svg)
+![label leakage](assets/leakage.png)
 
 - 99.7% of unique complaint phrases map to exactly one acuity; 99.8% of test phrases appear verbatim in train.
 - Consequently a TF-IDF/text model reaches QWK ≈ 1.0 — a *property of the data-generating process*, not skill.
@@ -72,7 +72,7 @@ steps), its **data provenance** (features provided vs imputed, sentinel handling
 a **multi-party oversight** list binding the triage nurse, senior physician, equity auditor, and operations to
 concrete triggers. Decisions and human overrides are written to an **append-only audit log**.
 
-![decision chain](assets/decision-chain.svg)
+![decision chain](assets/decision-chain.png)
 
 ## 3. Results
 

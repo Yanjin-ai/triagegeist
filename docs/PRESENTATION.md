@@ -12,33 +12,33 @@ how it reacts → honest positioning.
 ### 1 · The central insight that shapes everything
 The acuity label is leaked by the complaint text, so a text model scores ~1.0 (a data property, not skill).
 We make the **text-blind structured model** the honest decision core.
-![leakage](assets/leakage.svg)
+![leakage](assets/leakage.png)
 
 ### 2 · System architecture
 Four layers — prediction → governance → operations → supervisable interfaces — over a leakage-safe data pipeline.
-![architecture](assets/architecture.svg)
+![architecture](assets/architecture.png)
 
 ### 3 · Data processing (technical depth)
 Four tables joined on `patient_id`; missingness modeled as signal; outcomes blocklisted; one transform for
 train **and** serving; guarantees are unit-tested.
-![data pipeline](assets/data-pipeline.svg)
+![data pipeline](assets/data-pipeline.png)
 
 ### 4 · Design considerations → choices → advantages
 Every design decision answers a specific clinical or data challenge.
-![design tradeoffs](assets/design-tradeoffs.svg)
+![design tradeoffs](assets/design-tradeoffs.png)
 
 ### 5 · A single supervisable decision
 The 9-step decision chain, data provenance, and the multi-party oversight that every prediction carries.
-![decision chain](assets/decision-chain.svg)
+![decision chain](assets/decision-chain.png)
 
 ### 6 · Business flow — arrival to bed, human in the loop
 Confident cases auto-suggest and flow fast; ambiguous / critical / equity-sensitive cases defer to humans.
 Every step is audit-logged.
-![workflow](assets/workflow.svg)
+![workflow](assets/workflow.png)
 
 ### 7 · How it reacts — four scenarios, four behaviours
 Critical → escalate; ambiguous → honest defer; equity-flagged → bias oversight; minor → fast-track + auto.
-![scenarios](assets/scenarios.svg)
+![scenarios](assets/scenarios.png)
 
 ### 8 · Results that matter
 Calibrated, uncertainty-aware, fair, operational — plus an honest negative result.
@@ -46,7 +46,7 @@ Calibrated, uncertainty-aware, fair, operational — plus an honest negative res
 
 ### 9 · Honest positioning vs deployed products
 Principle-aligned on the trustworthiness axes that matter; infrastructure- and validation-incomplete (TRL 3–4).
-![comparison](assets/comparison.svg)
+![comparison](assets/comparison.png)
 
 ---
 
