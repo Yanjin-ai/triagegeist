@@ -1,8 +1,16 @@
 # Kaggle submission checklist
 
-Triagegeist is a **judged hackathon**: "a well-documented Kaggle Notebook with a working proof-of-concept and
-a thorough writeup is a complete and valid submission." Everything below is ready in this repo; the remaining
-steps are the ones only you (account holder) can perform.
+Triagegeist is a **judged hackathon**. The official submission has **two required components**:
+1. **A Kaggle Notebook** — your model/analysis/prototype. **Must run end-to-end without errors** and be set
+   to **public** at submission time. → `notebooks/triagegeist_submission.ipynb` (self-contained, smoke-tested).
+2. **A Project Writeup** — submitted via the **Writeups tab**, following the template:
+   *clinical problem statement · methodology · results · limitations · reproducibility notes*.
+   → paste **[`docs/WRITEUP_SUBMISSION.md`](WRITEUP_SUBMISSION.md)** (written to exactly those 5 sections).
+
+Optional but recommended proof-of-concept: a short demo video/GIF → see
+[`docs/VIDEO_SCRIPT.md`](VIDEO_SCRIPT.md) (shot-by-shot script + GIF fallback).
+
+Everything below is ready in this repo; the remaining steps are the ones only you can perform.
 
 ## Before you submit — confirm on the competition page
 - [ ] **Deadline** — check the countdown on the Overview tab.
@@ -18,11 +26,12 @@ steps are the ones only you (account holder) can perform.
       LightGBM is auto-selected on Kaggle; it writes `submission.csv` in the last cell.
 - [ ] **Save Version** (Save & Run All).
 
-## 2. Writeup
-- [ ] Paste [`docs/WRITEUP.md`](WRITEUP.md) into the notebook's intro markdown **or** the competition's writeup
-      field. It is already mapped to the four judging axes (clinical relevance · technical quality ·
-      insight/honesty · novelty/impact) and leads with the leakage finding.
-- [ ] Link the GitHub repo and the demo instructions for the proof-of-concept (UI + live inference).
+## 2. Writeup (Writeups tab)
+- [ ] Paste **[`docs/WRITEUP_SUBMISSION.md`](WRITEUP_SUBMISSION.md)** — it follows the official template
+      (clinical problem statement · methodology · results · limitations · reproducibility notes) and embeds the
+      architecture / leakage / decision-chain figures.
+- [ ] Link the GitHub repo and the demo (UI + live inference); embed the demo video/GIF if recorded.
+- [ ] (`docs/WRITEUP.md` is the longer rubric-axis version, kept for reference.)
 
 ## 3. Leaderboard CSV (if a scored track exists)
 - [ ] **Honest model:** submit `submission.csv` (text-blind structured, QWK ≈ 0.93).
