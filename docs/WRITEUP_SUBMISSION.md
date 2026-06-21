@@ -78,6 +78,8 @@ concrete triggers. Decisions and human overrides are written to an **append-only
 
 All numbers are on a held-out internal validation split; the model is the text-blind core.
 
+![results](assets/results.png)
+
 | Area | Result |
 |---|---|
 | **Acuity (scored target)** | **QWK ≈ 0.93**, accuracy ≈ 0.85; acuity-1/2 recall ≈ 0.95 / 0.97; undertriage(1,2) ≈ 2–3% |

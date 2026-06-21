@@ -94,16 +94,7 @@ nurse, senior physician, equity auditor, and operations to concrete triggers —
 
 ## Results that matter
 
-| | |
-|---|---|
-| Acuity (text-blind core) | **QWK ≈ 0.93**, acuity-1/2 recall ≈ 0.95 / 0.97, undertriage ≈ 2–3% |
-| Calibration | confidence ECE **0.022 → 0.012** |
-| Uncertainty | conformal coverage guaranteed; auto-triaged cases carry **0.16%** undertriage vs 6.4% in the deferred set |
-| Fairness | undertriage gaps surfaced with CIs (e.g. Estonian-speaking 7.4% vs Finnish 2.5%) |
-| Operations | cohort: 43% expected admissions, 3.5h mean LOS, interpretable bucket mix |
-
-A telling **negative result**: a physiology-based safety override *lowers* agreement with the synthetic labels
-— because the labels are text-determined — which quantifies the real-world risk of complaint-encoded triage.
+![results](assets/results.png)
 
 ## Honest about what this is
 

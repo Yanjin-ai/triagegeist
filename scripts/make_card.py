@@ -128,7 +128,42 @@ def thumbnail():
     print("wrote", OUT / "thumbnail.png", im.size)
 
 
+def results():
+    W, H = 1200, 864
+    im = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(im)
+    d.rounded_rectangle((6, 6, W - 6, H - 6), 22, outline=LINE, width=2)
+    d.rectangle((6, 6, W - 6, 14), fill=ACCENT)
+    d.text((40, 40), "Results that matter", font=font(40, True), fill=TEXT)
+    d.text((42, 98), "text-blind structured core · held-out validation", font=font(24), fill=MUTED)
+
+    rows = [
+        ("ACUITY · scored core", "recall acuity-1/2 ≈ 0.95 / 0.97   ·   undertriage ≈ 2–3%", "QWK 0.93", GREEN),
+        ("CALIBRATION", "isotonic — probabilities you can act on", "ECE 0.022 → 0.012", GREEN),
+        ("UNCERTAINTY · conformal", "undertriage: auto-triaged vs deferred   ·   coverage guaranteed", "0.16% vs 6.4%", ACCENT),
+        ("FAIRNESS", "undertriage Estonian vs Finnish   ·   reported with 95% CIs", "7.4% vs 2.5%", (255, 140, 59)),
+        ("OPERATIONS", "expected admissions · mean LOS · interpretable buckets", "43%  ·  3.5h", ACCENT),
+    ]
+    y = 150
+    for cat, detail, big, col in rows:
+        d.rounded_rectangle((40, y, W - 40, y + 100), 12, fill=PANEL, outline=LINE, width=2)
+        d.text((62, y + 18), cat, font=font(18, True), fill=ACCENT)
+        d.text((62, y + 46), detail, font=font(22), fill=(207, 216, 227))
+        bf = font(40, True)
+        d.text((W - 62 - tw(d, big, bf), y + 28), big, font=bf, fill=col)
+        y += 116
+
+    d.rounded_rectangle((40, y + 2, W - 40, y + 110), 12, fill=(26, 20, 20), outline=(92, 37, 37), width=2)
+    d.text((62, y + 20), "Negative result (reported on purpose)", font=font(20, True), fill=(255, 140, 59))
+    d.text((62, y + 50), "A physiology safety override LOWERS agreement (QWK 0.93 → 0.895) — because the labels are text-determined.",
+           font=font(20), fill=(207, 216, 227))
+    d.text((62, y + 78), "That quantifies the clinical risk of trusting complaint-encoded triage.", font=font(20), fill=MUTED)
+    im.save(OUT / "results.png")
+    print("wrote", OUT / "results.png", im.size)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     card()
     thumbnail()
+    results()

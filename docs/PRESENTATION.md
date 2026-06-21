@@ -40,7 +40,11 @@ Every step is audit-logged.
 Critical → escalate; ambiguous → honest defer; equity-flagged → bias oversight; minor → fast-track + auto.
 ![scenarios](assets/scenarios.svg)
 
-### 8 · Honest positioning vs deployed products
+### 8 · Results that matter
+Calibrated, uncertainty-aware, fair, operational — plus an honest negative result.
+![results](assets/results.png)
+
+### 9 · Honest positioning vs deployed products
 Principle-aligned on the trustworthiness axes that matter; infrastructure- and validation-incomplete (TRL 3–4).
 ![comparison](assets/comparison.svg)
 
