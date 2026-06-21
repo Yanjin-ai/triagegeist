@@ -35,6 +35,18 @@ to an append-only audit log.
 
 ![decision chain](docs/assets/decision-chain.svg)
 
+## How it works · how it reacts
+*(full visual deck: [`docs/PRESENTATION.md`](docs/PRESENTATION.md) — data processing, design trade-offs, more)*
+
+**Business flow** — confident cases auto-suggest and flow fast; critical / ambiguous / equity-sensitive cases defer to a human; every step is audit-logged.
+![workflow](docs/assets/workflow.svg)
+
+**Scenario reactions** — the same engine behaves differently by case:
+![scenarios](docs/assets/scenarios.svg)
+
+**Design considerations** — each choice answers a specific clinical or data challenge:
+![design tradeoffs](docs/assets/design-tradeoffs.svg)
+
 ## Capabilities
 
 | Layer | What it does | Status |

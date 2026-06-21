@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="960" height="430" rx="14" fill="#0f1419"/>
+  <text x="32" y="40" fill="#e6edf3" font-size="20" font-weight="700">How it reacts — four scenarios, four behaviours</text>
+
+  <!-- card 1 critical -->
+  <rect x="32" y="62" width="216" height="338" rx="11" fill="#161c24" stroke="#5c2525"/>
+  <rect x="48" y="78" width="44" height="30" rx="7" fill="#ff4d4f"/><text x="60" y="100" fill="#04121f" font-size="16" font-weight="700">1</text>
+  <text x="104" y="92" fill="#cfd8e3" font-size="12" font-weight="700">CRITICAL</text>
+  <text x="104" y="108" fill="#8b98a8" font-size="11">chest pain · NEWS2 9</text>
+  <line x1="48" y1="120" x2="232" y2="120" stroke="#2a3441"/>
+  <text x="48" y="146" fill="#cfd8e3" font-size="12">conformal set {1,2}</text>
+  <text x="48" y="170" fill="#cfd8e3" font-size="12">P(critical) ≈ 100%</text>
+  <text x="48" y="194" fill="#cfd8e3" font-size="12">bucket: resuscitation</text>
+  <text x="48" y="218" fill="#ff8c3b" font-size="12" font-weight="700">→ top of queue</text>
+  <text x="48" y="240" fill="#ff8c3b" font-size="12" font-weight="700">→ senior physician</text>
+  <rect x="48" y="356" width="184" height="30" rx="7" fill="#1a1414" stroke="#5c2525"/>
+  <text x="60" y="376" fill="#ff8c3b" font-size="11.5" font-weight="700">act now · do not miss</text>
+
+  <!-- card 2 ambiguous -->
+  <rect x="262" y="62" width="216" height="338" rx="11" fill="#161c24" stroke="#5c4a1f"/>
+  <rect x="278" y="78" width="44" height="30" rx="7" fill="#f5c518"/><text x="290" y="100" fill="#04121f" font-size="16" font-weight="700">?</text>
+  <text x="334" y="92" fill="#cfd8e3" font-size="12" font-weight="700">AMBIGUOUS</text>
+  <text x="334" y="108" fill="#8b98a8" font-size="11">glaucoma · vitals benign</text>
+  <line x1="278" y1="120" x2="462" y2="120" stroke="#2a3441"/>
+  <text x="278" y="146" fill="#cfd8e3" font-size="12">conformal set {1..5}</text>
+  <text x="278" y="170" fill="#cfd8e3" font-size="12">high entropy</text>
+  <text x="278" y="194" fill="#cfd8e3" font-size="12">physiology can't resolve</text>
+  <text x="278" y="218" fill="#f5c518" font-size="12" font-weight="700">→ DEFER to human</text>
+  <text x="278" y="240" fill="#8b98a8" font-size="11.5">honest "I'm not sure"</text>
+  <rect x="278" y="356" width="184" height="30" rx="7" fill="#1c1a12" stroke="#5c4a1f"/>
+  <text x="290" y="376" fill="#f5c518" font-size="11.5" font-weight="700">guaranteed-coverage set</text>
+
+  <!-- card 3 equity -->
+  <rect x="492" y="62" width="216" height="338" rx="11" fill="#161c24" stroke="#25415c"/>
+  <rect x="508" y="78" width="44" height="30" rx="7" fill="#7d8794"/><text x="520" y="100" fill="#fff" font-size="15" font-weight="700">4</text>
+  <text x="564" y="92" fill="#cfd8e3" font-size="12" font-weight="700">EQUITY-FLAGGED</text>
+  <text x="564" y="108" fill="#8b98a8" font-size="11">Estonian · uninsured</text>
+  <line x1="508" y1="120" x2="692" y2="120" stroke="#2a3441"/>
+  <text x="508" y="146" fill="#cfd8e3" font-size="12">pain not assessed</text>
+  <text x="508" y="170" fill="#cfd8e3" font-size="12">subgroup ↑ undertriage</text>
+  <text x="508" y="194" fill="#cfd8e3" font-size="12">in fairness audit</text>
+  <text x="508" y="218" fill="#4aa3ff" font-size="12" font-weight="700">→ equity auditor</text>
+  <text x="508" y="240" fill="#8b98a8" font-size="11.5">bias oversight added</text>
+  <rect x="508" y="356" width="184" height="30" rx="7" fill="#13202e" stroke="#25415c"/>
+  <text x="520" y="376" fill="#4aa3ff" font-size="11.5" font-weight="700">monitored, not ignored</text>
+
+  <!-- card 4 minor -->
+  <rect x="722" y="62" width="206" height="338" rx="11" fill="#161c24" stroke="#1f5235"/>
+  <rect x="738" y="78" width="44" height="30" rx="7" fill="#3ecf8e"/><text x="750" y="100" fill="#04121f" font-size="16" font-weight="700">5</text>
+  <text x="794" y="92" fill="#cfd8e3" font-size="12" font-weight="700">MINOR</text>
+  <text x="794" y="108" fill="#8b98a8" font-size="11">sore throat</text>
+  <line x1="738" y1="120" x2="912" y2="120" stroke="#2a3441"/>
+  <text x="738" y="146" fill="#cfd8e3" font-size="12">conformal set {5}</text>
+  <text x="738" y="170" fill="#cfd8e3" font-size="12">low risk, confident</text>
+  <text x="738" y="194" fill="#cfd8e3" font-size="12">short predicted LOS</text>
+  <text x="738" y="218" fill="#3ecf8e" font-size="12" font-weight="700">→ fast-track</text>
+  <text x="738" y="240" fill="#3ecf8e" font-size="12" font-weight="700">→ auto-suggest</text>
+  <rect x="738" y="356" width="174" height="30" rx="7" fill="#101a15" stroke="#1f5235"/>
+  <text x="750" y="376" fill="#3ecf8e" font-size="11.5" font-weight="700">flows fast, frees staff</text>
+</svg>

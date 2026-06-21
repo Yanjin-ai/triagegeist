@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 452" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="960" height="452" rx="14" fill="#0f1419"/>
+  <text x="32" y="40" fill="#e6edf3" font-size="20" font-weight="700">Honest positioning vs deployed medical-AI products</text>
+  <text x="32" y="62" fill="#8b98a8" font-size="12.5">e.g. Mednition KATE, Aidoc — FDA-regulated, EHR-integrated, validated on real multi-site data</text>
+
+  <!-- left: where we match -->
+  <rect x="32" y="80" width="448" height="320" rx="11" fill="#101a15" stroke="#1f5235"/>
+  <text x="50" y="106" fill="#3ecf8e" font-size="14" font-weight="700">✓ Principle-aligned (we match)</text>
+  <g font-size="12.5" fill="#cfd8e3">
+    <text x="50" y="140">• Calibrated probabilities (ECE reported)</text>
+    <text x="50" y="170">• Uncertainty + deferral (conformal — best practice)</text>
+    <text x="50" y="200">• Subgroup fairness with confidence intervals</text>
+    <text x="50" y="230">• Explainable basis (decision chain + provenance)</text>
+    <text x="50" y="260">• Human-in-the-loop + audit log</text>
+    <text x="50" y="290">• Undertriage safety net</text>
+  </g>
+  <rect x="50" y="316" width="412" height="64" rx="9" fill="#13202e" stroke="#25415c"/>
+  <text x="64" y="340" fill="#8b98a8" font-size="11.5">These are exactly the trustworthiness axes the Epic Sepsis</text>
+  <text x="64" y="358" fill="#8b98a8" font-size="11.5">Model lacked when it missed 67% on external validation.</text>
+
+  <!-- right: where we gap -->
+  <rect x="496" y="80" width="432" height="320" rx="11" fill="#1a1414" stroke="#5c2525"/>
+  <text x="514" y="106" fill="#ff8c3b" font-size="14" font-weight="700">✗ Not yet (the deployment gap)</text>
+  <g font-size="12.5" fill="#cfd8e3">
+    <text x="514" y="140">• Real / prospective / external validation</text>
+    <text x="514" y="170">• FDA SaMD clearance · GMLP lifecycle</text>
+    <text x="514" y="200">• EHR / FHIR R4 integration, real-time</text>
+    <text x="514" y="230">• Continuous drift monitoring</text>
+    <text x="514" y="260">• Security · privacy · access control</text>
+    <text x="514" y="290">• Optimization-based scheduling</text>
+  </g>
+  <rect x="514" y="316" width="396" height="64" rx="9" fill="#0f1419" stroke="#5c2525"/>
+  <text x="528" y="340" fill="#8b98a8" font-size="11.5">None of these are closable from a synthetic,</text>
+  <text x="528" y="358" fill="#8b98a8" font-size="11.5">single-source dataset — they are the product roadmap.</text>
+
+  <!-- TRL bar -->
+  <text x="32" y="428" fill="#8b98a8" font-size="12.5" font-weight="700">Maturity:</text>
+  <rect x="116" y="416" width="700" height="16" rx="8" fill="#161c24" stroke="#2a3441"/>
+  <rect x="116" y="416" width="240" height="16" rx="8" fill="#4aa3ff"/>
+  <circle cx="356" cy="424" r="9" fill="#4aa3ff"/>
+  <text x="372" y="429" fill="#e6edf3" font-size="12" font-weight="700">us · TRL 3–4 (research prototype)</text>
+  <text x="724" y="429" fill="#8b98a8" font-size="12">TRL 9 · deployed</text>
+</svg>

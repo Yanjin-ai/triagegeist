@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 472" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="960" height="472" rx="14" fill="#0f1419"/>
+  <text x="32" y="40" fill="#e6edf3" font-size="20" font-weight="700">Design considerations — challenge → choice → why it wins</text>
+
+  <!-- header -->
+  <g font-size="12" font-weight="700" fill="#4aa3ff">
+    <text x="40" y="74">CHALLENGE</text><text x="330" y="74">DESIGN CHOICE</text><text x="650" y="74">ADVANTAGE</text>
+  </g>
+  <line x1="32" y1="82" x2="928" y2="82" stroke="#2a3441"/>
+
+  <g font-size="12.5">
+    <!-- rows -->
+    <g transform="translate(0,0)">
+      <text x="40" y="112" fill="#ff8c3b" font-weight="700">Label leaked by text</text>
+      <text x="330" y="112" fill="#cfd8e3">text-blind structured model</text>
+      <text x="650" y="112" fill="#8b98a8">clinically meaningful, not a lookup</text>
+    </g>
+    <line x1="32" y1="128" x2="928" y2="128" stroke="#1c2530"/>
+    <g>
+      <text x="40" y="158" fill="#ff8c3b" font-weight="700">Undertriage is the danger</text>
+      <text x="330" y="158" fill="#cfd8e3">balanced weights + safety override</text>
+      <text x="650" y="158" fill="#8b98a8">protects rare acuity-1/2 (recall ~0.95)</text>
+    </g>
+    <line x1="32" y1="174" x2="928" y2="174" stroke="#1c2530"/>
+    <g>
+      <text x="40" y="204" fill="#ff8c3b" font-weight="700">A label isn't enough</text>
+      <text x="330" y="204" fill="#cfd8e3">isotonic calibration</text>
+      <text x="650" y="204" fill="#8b98a8">trustworthy risk (ECE 0.022 → 0.012)</text>
+    </g>
+    <line x1="32" y1="220" x2="928" y2="220" stroke="#1c2530"/>
+    <g>
+      <text x="40" y="250" fill="#ff8c3b" font-weight="700">Know what you don't know</text>
+      <text x="330" y="250" fill="#cfd8e3">conformal prediction sets (APS)</text>
+      <text x="650" y="250" fill="#8b98a8">coverage guarantee → safe human deferral</text>
+    </g>
+    <line x1="32" y1="266" x2="928" y2="266" stroke="#1c2530"/>
+    <g>
+      <text x="40" y="296" fill="#ff8c3b" font-weight="700">Hidden bias / equity</text>
+      <text x="330" y="296" fill="#cfd8e3">subgroup audit with bootstrap CIs</text>
+      <text x="650" y="296" fill="#8b98a8">undertriage gaps surfaced, not over-read</text>
+    </g>
+    <line x1="32" y1="312" x2="928" y2="312" stroke="#1c2530"/>
+    <g>
+      <text x="40" y="342" fill="#ff8c3b" font-weight="700">Prediction ≠ action</text>
+      <text x="330" y="342" fill="#cfd8e3">resource buckets + queue policies</text>
+      <text x="650" y="342" fill="#8b98a8">single risk → department operations</text>
+    </g>
+    <line x1="32" y1="358" x2="928" y2="358" stroke="#1c2530"/>
+    <g>
+      <text x="40" y="388" fill="#ff8c3b" font-weight="700">Black boxes erode trust</text>
+      <text x="330" y="388" fill="#cfd8e3">decision chain + provenance + oversight</text>
+      <text x="650" y="388" fill="#8b98a8">every call is explainable &amp; supervisable</text>
+    </g>
+    <line x1="32" y1="404" x2="928" y2="404" stroke="#1c2530"/>
+    <g>
+      <text x="40" y="434" fill="#ff8c3b" font-weight="700">Who decided what?</text>
+      <text x="330" y="434" fill="#cfd8e3">append-only audit log</text>
+      <text x="650" y="434" fill="#8b98a8">accountability built in</text>
+    </g>
+  </g>
+</svg>

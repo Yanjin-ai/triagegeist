@@ -12,6 +12,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "src.serve.app"],
       "port": 8078
+    },
+    {
+      "name": "assets",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8079", "--directory", "docs/assets"],
+      "port": 8079
     }
   ]
 }

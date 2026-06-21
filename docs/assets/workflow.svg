@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 432" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <defs><marker id="aw" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4a5663"/></marker></defs>
+  <rect width="960" height="432" rx="14" fill="#0f1419"/>
+  <text x="32" y="40" fill="#e6edf3" font-size="20" font-weight="700">Business flow — from arrival to bed, with a human in the loop</text>
+
+  <!-- top row: arrival -> intake -> engine -> decision -->
+  <g font-size="12">
+    <rect x="32" y="66" width="150" height="64" rx="10" fill="#161c24" stroke="#2a3441"/>
+    <text x="46" y="92" fill="#cfd8e3" font-weight="700">1 · Arrival</text><text x="46" y="112" fill="#8b98a8">vitals · complaint · history</text>
+    <rect x="214" y="66" width="150" height="64" rx="10" fill="#161c24" stroke="#2a3441"/>
+    <text x="228" y="92" fill="#cfd8e3" font-weight="700">2 · Intake</text><text x="228" y="112" fill="#8b98a8">structured + missing flags</text>
+    <rect x="396" y="66" width="170" height="64" rx="10" fill="#13351f" stroke="#1f5235"/>
+    <text x="410" y="92" fill="#3ecf8e" font-weight="700">3 · TriageEngine</text><text x="410" y="112" fill="#cfd8e3">acuity + conformal + risk</text>
+    <rect x="598" y="66" width="170" height="64" rx="10" fill="#161c24" stroke="#2a3441"/>
+    <text x="612" y="92" fill="#f5c518" font-weight="700">4 · Risk + uncertainty</text><text x="612" y="112" fill="#8b98a8">calibrated · set size</text>
+  </g>
+  <path d="M182 98 H214" stroke="#4a5663" stroke-width="2" marker-end="url(#aw)"/>
+  <path d="M364 98 H396" stroke="#4a5663" stroke-width="2" marker-end="url(#aw)"/>
+  <path d="M566 98 H598" stroke="#4a5663" stroke-width="2" marker-end="url(#aw)"/>
+
+  <!-- branch -->
+  <path d="M683 130 V158" stroke="#4a5663" stroke-width="2" marker-end="url(#aw)"/>
+  <rect x="560" y="160" width="248" height="40" rx="9" fill="#161c24" stroke="#2a3441"/>
+  <text x="574" y="185" fill="#cfd8e3" font-size="12" font-weight="700">confident set?  singleton → auto · multi → defer</text>
+
+  <!-- two lanes -->
+  <rect x="32" y="222" width="430" height="150" rx="10" fill="#101a15" stroke="#1f5235"/>
+  <text x="48" y="246" fill="#3ecf8e" font-size="13" font-weight="700">AUTO-SUGGEST lane</text>
+  <text x="48" y="270" fill="#cfd8e3" font-size="12">→ Triage nurse confirms (or overrides)</text>
+  <text x="48" y="292" fill="#cfd8e3" font-size="12">→ resource bucket + queue priority assigned</text>
+  <text x="48" y="314" fill="#cfd8e3" font-size="12">→ feeds ED-load / bed-pressure view</text>
+  <text x="48" y="344" fill="#8b98a8" font-size="11.5">low-risk, low-uncertainty cases flow fast</text>
+
+  <rect x="476" y="222" width="450" height="150" rx="10" fill="#1a1414" stroke="#5c2525"/>
+  <text x="492" y="246" fill="#ff8c3b" font-size="13" font-weight="700">DEFER-TO-HUMAN lane</text>
+  <text x="492" y="270" fill="#cfd8e3" font-size="12">→ Senior physician co-signs / escalates</text>
+  <text x="492" y="292" fill="#cfd8e3" font-size="12">→ Equity auditor flagged on at-risk subgroups</text>
+  <text x="492" y="314" fill="#cfd8e3" font-size="12">→ safety override caps high-risk physiology at ESI ≤3</text>
+  <text x="492" y="344" fill="#8b98a8" font-size="11.5">critical / ambiguous / equity-sensitive cases get human review</text>
+
+  <!-- audit footer -->
+  <rect x="32" y="386" width="894" height="32" rx="8" fill="#13202e" stroke="#25415c"/>
+  <text x="48" y="407" fill="#8b98a8" font-size="11.5">Every step writes to an append-only AUDIT LOG — model suggestion + each human action (confirm / override + reason).</text>
+</svg>
