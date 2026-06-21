@@ -1,9 +1,11 @@
 <div align="center">
 
-# 🚑 Triage Copilot
+# Triage Copilot
+
+![Triage Copilot](docs/assets/card.png)
 
 ### An honest emergency-department triage decision-support stack
-**predict → calibrate → audit → operate** — with every decision shown, supervised, and logged.
+**predict → calibrate → audit → operate** — every decision shown, supervised, and logged.
 
 `text-blind structured model` · `conformal uncertainty` · `subgroup fairness` · `ED operations console` · `multi-party oversight`
 
