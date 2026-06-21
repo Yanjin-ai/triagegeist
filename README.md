@@ -104,6 +104,7 @@ governance: [`docs/GOVERNANCE.md`](docs/GOVERNANCE.md).
 ## Documentation
 | Judge-facing | Engineering |
 |---|---|
+| [`PROJECT_DESCRIPTION.md`](docs/PROJECT_DESCRIPTION.md) — illustrated overview | [`PRESENTATION.md`](docs/PRESENTATION.md) — visual deck |
 | [`WRITEUP.md`](docs/WRITEUP.md) — rubric-mapped | [`PLAN.md`](docs/PLAN.md) · [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | [`INSIGHT_label_leakage.md`](reports/INSIGHT_label_leakage.md) | [`DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) · [`DECISIONS.md`](docs/DECISIONS.md) |
 | [`COMPARISON.md`](docs/COMPARISON.md) — vs SOTA/products | [`PROGRESS.md`](docs/PROGRESS.md) |
