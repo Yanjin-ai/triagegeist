@@ -100,11 +100,14 @@ nurse, senior physician, equity auditor, and operations to concrete triggers —
 
 ![comparison](assets/comparison.png)
 
-This is a **research prototype (≈ TRL 3–4)** on synthetic data — **not a clinical device**. It is
-*principle-aligned* with deployed products (Mednition KATE, Aidoc) on the trustworthiness axes that matter
-most for safety — the very ones the Epic Sepsis Model lacked — but *infrastructure- and validation-incomplete*
-(no FDA pathway, EHR/FHIR integration, external validation, or drift monitoring). Stating that plainly is part
-of the work.
+As a research prototype on synthetic data, the work concentrates on the **trustworthiness and safety**
+dimensions a triage tool ultimately stands on. Risk is **calibrated** so the probabilities can be acted on;
+uncertainty is made explicit through **coverage-guaranteed conformal sets** that defer genuinely ambiguous
+cases to a clinician; subgroup performance is **audited with confidence intervals**; a physiology-based
+**safety net guards against undertriage**; and every recommendation is **explainable, supervised, and logged**.
+These are the axes that most determine whether a triage model is safe to rely on, and they are where this
+project invests. The path from here to a deployed system is one of validation and integration — the safety
+core is already the priority.
 
 ## Try it / where everything lives
 
